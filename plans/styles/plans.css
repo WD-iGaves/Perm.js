@@ -1,0 +1,73 @@
+@charset "GBK";
+@chaset 'UTF-8';
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+  margin: 0;
+  padding: 0; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+fieldset, img {
+  border: 0; }
+
+address, caption, cite, code, dfn, em, strong, th, var {
+  font-style: normal;
+  font-weight: normal; }
+
+ol, ul {
+  list-style: none; }
+
+caption, th {
+  text-align: left; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+  font-weight: normal; }
+
+q:before, q:after {
+  content: ''; }
+
+abbr, acronym {
+  border: 0; }
+
+body {
+  font: 12px/1.75 "ËÎÌו", arial, sans-serif; }
+
+fieldset {
+  display: inline; }
+
+button {
+  line-height: 1.2;
+  vertical-align: middle;
+  cursor: pointer; }
+
+strong {
+  font-weight: 800; }
+
+a {
+  text-decoration: none; }
+
+#to-do-list-layout {
+  position: relative; }
+  #to-do-list-layout li {
+    height: 25px;
+    position: relative; }
+    #to-do-list-layout li span {
+      display: inline-block;
+      float: left;
+      line-height: 25px;
+      margin: 0 10px; }
+    #to-do-list-layout li a {
+      display: inline-block;
+      height: 25px;
+      line-height: 25px; }
+    #to-do-list-layout li .to-do-done {
+      float: left;
+      width: 25px;
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+      -moz-border-radius: 10px;
+      background-color: green; }
+    #to-do-list-layout li .to-do-set {
+      width: 25px; }

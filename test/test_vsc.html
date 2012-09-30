@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../src/class.js"></script>
+<script type="text/javascript" src="../src/enumberable.js"></script>
+<script type="text/javascript" src="../src/utils.js"></script>
+<script type="text/javascript" src="../src/eventdispatcher.js"></script>
+<script type="text/javascript" src="../src/sizzle.js"></script>
+<script type="text/javascript" src="../src/selector.js"></script>
+<script type="text/javascript" src="../src/hash.js"></script>
+<script type="text/javascript" src="../src/vsc.js"></script>
+<style type="text/css">
+	.wangdong{background-color:#ff00ff}
+	.border-red{border:red 1px solid;}
+	.border-blue{border:blue 1px solid;}
+	.border-grey{border:grey 1px solid;}
+	div{margin-top:10px;}
+</style>
+<script type="text/javascript">
+	//模拟加载数据。
+	function D(s){
+		return new Dom(s);
+	}
+// 	var DataService = Class.create({
+// 		initialize:function(){
+// 		},
+// 		loadData:function(){
+// 			this.dispatchEvent('data_loaded',{name:'wagndong',age:18});
+// 			var self=this;
+// 			setTimeout(function(){
+// 				self.dispatchEvent('error','我了个错了');
+// 			},1000);
+// 		},
+// 		mode_click_ex_handler:function(){
+// 			this.loadData();
+// 		}
+// 	},Service);
+	
+// 	var ModeView = Class.create({
+// 		initialize:function(){
+// 			this.m = D("#j-mode-view");
+// 			this._initEvent();
+// 		},
+// 		_initEvent:function(){
+// 			this.m.bind('click',this.click_handler.proxy(this));
+// 		},
+// 		click_handler:function(e){
+// 			this.dispatchEvent("mode_click");
+// 		},
+// 		data_loaded_ex_handler:function(e){
+// 			alert(e.data.name);
+// 			D("#j-load-data").html(e.data.name+":"+e.data.age);
+// 		},
+// 		error_ex_handler:function(e){
+// 			D("#j-load-data").html(e.data);
+// 		}
+// 	},View);
+	
+// 	Dom.ready(function(){
+// 		var views = {
+// 			'mode-view':ModeView
+// 		};
+// 		var services = {
+// 				'data-service':DataService
+// 		}
+// 		var connect_rule = [
+// 			['mode-view','data-service','mode_click'],
+// 			['data-service','mode-view','data_loaded,error,mode_click']
+// 		];
+		
+// 		var c = new Connect(views,services);
+// 		c.a(connect_rule);
+		
+// 		$(".j-a-p").delegate('.j-a','click',function(e){
+// 			alert(e.target.innerHTML);
+// 		});
+
+		
+// 	});
+
+
+var DataService=Class.create({
+	initialize:function(){
+		
+	},
+	loadData:function(){
+		var arr = {name:'wangdong',id:112};
+		this.dispatchEvent("data_loaded",arr);
+	}
+},Service);
+
+var DataService2=Class.create({
+	initialize:function(){
+		
+	},
+	loadData:function(){
+		var arr = {name:'wangdong',id:112};
+		this.dispatchEvent("data_loaded",arr);
+	}
+},Service);
+
+var NameView = Class.create({
+	initialize:function(){
+		this._initEvent();
+		this.name = 'wwww';
+	},
+	_initEvent:function(){
+		$('#j-load-data').bind("click",this.click_handler.proxy(this))
+	},
+	click_handler:function(e){
+		this.dispatchEvent('start_load');
+	},
+	data_loaded_ex_handler:function(e){
+		$("#j-name").html(e.data.name);
+	},
+	setName:function(e){
+		$("#j-name").html(e.data.name);
+	},
+	setId:function(e){
+		$("#j-id").html(e.data.id);
+		console.log(this,this.name);
+		this.dispatchEvent("load_by_id",e.data.id);
+	}
+	data_loaded_ex_handler:function(){
+		
+	}
+},View);
+
+// Dom.ready(function(){
+// 	var views = {
+// 			'name-view':NameView
+// 	};
+// 	var services ={
+// 		'data-service':DataService
+// 	};
+	
+// 	var connnect_rule = [
+// 		  ['data-service','name-view','data_loaded']                
+// 	]
+// 	var connect = new Connect(views,services);
+// 	connect.a(connnect_rule);
+// 	 var nameview = Class.instance(NameView);
+// 	 var dataservice = Class.instance(DataService);
+// 	 nameview.addEventListener('start_load',dataservice.loadData.proxy(dataservice));
+	 
+// 	 dataservice.addEventListener("data_loaded",nameview.setName.proxy(nameview))
+// 	 	.addEventListener('data_loaded',W.setId);
+// });
+
+window.onload=function(){
+// 	document.getElementById("j-id").onclick=W.setId
+var nameview = Class.instance(NameView);
+var dataservice = Class.instance(DataService);
+
+	var _d = function(id){
+		return document.getElementById(id);
+	};
+	
+	_d("j-load-data").onclick=function(){
+		dataservice.loadData({onload:function(){
+			nameview.setName(data);
+			name2view.setName(data);
+		}});
+	}
+	nameview.bind("load_by_id",function(e){
+		nane2view.getById(e);
+	});
+	}
+</script>
+</head>
+<body>
+<!-- <a href="javascript:;" id="j-mode-view">modeview-click-trigger</a> -->
+<!-- <a href="javascript:;" id="j-load-data">dateservice:loaddata?</a> -->
+<div>
+	<div>
+		<div class="j-a-p">
+			<a class="j-a"><span>aaaaaaaaaaaa2</span></a>
+			<a class="j-a"><span>aaaaaaaaaaaa1</span></a>
+			<a class="j-a"><span>aaaaaaaaaaaa3</span></a>
+		</div>
+		<div class="j-a-p">
+			<a class="j-a"><span>aaaaaaaaaaaa21</span></a>
+			<a class="j-a"><span>aaaaaaaaaaaa33</span></a>
+			<a class="j-a"><span>aaaaaaaaaaaa11</span></a>
+		</div>
+	</div>
+</div>
+
+<div class="border-red">
+	<a href="javascript:;" id="j-load-data">点我拉去数据（dw）</a>
+</div>
+<div class="border-grey">
+	<span id="j-name">显示姓名：</span>
+</div>
+<div class="border-blue">
+	<span id="j-id">显示用户id:</span><span id="j-data">根据用户id拉去对应数据：</span>
+</div>
+</body>
+</html>

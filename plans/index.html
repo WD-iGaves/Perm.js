@@ -1,0 +1,70 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../src/class.js"></script>
+<script type="text/javascript" src="../src/enumberable.js"></script>
+<script type="text/javascript" src="../src/utils.js"></script>
+<script type="text/javascript" src="../src/eventdispatcher.js"></script>
+<script type="text/javascript" src="../src/sizzle.js"></script>
+<script type="text/javascript" src="../src/selector.js"></script>
+<script type="text/javascript" src="../src/hash.js"></script>
+<script type="text/javascript" src="../src/vsc.js"></script>
+<script type="text/javascript">
+</script>
+<!-- todo -list -->
+<link href="styles/plans.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="to-do-list-layout" class="task-window">
+	<h2>待办事件列表</h2>
+	
+	<ul id="to-do-list">
+		<li><a class="to-do-done" action="done"></a><span></span><a class="to-do-set" action="set">set</a></li>
+	</ul>
+	<h3>已经完成</h3>
+	<ul id="to-do-done-list">
+		<li><a class="to-do-undone" action="undone"></a><span></span></li>
+	</ul>
+	<div id="to-do-editor">
+		<div action="delete">删除</div>
+	</div>
+	<h3>添加</h3>
+	<div id="to-do-new">
+		<input id="todo-input" type='text'/>
+		<a href="javascript:;" action='add'>添加</a>
+	</div>
+</div>
+<script type="text/javascript" src="scripts/plans.js"></script>
+<script type="text/javascript" src="scripts/todo.js"></script>
+<script type="text/javascript" src="../plugin/datalist.js"></script>
+<script type="text/javascript">
+Dom.ready(function(){
+// 	var todo = Class.instance(TodoView);
+// 	todo.set_data(todo_data);
+	var todo_connenct = new Connect();
+	var todo_config = {
+			view:{
+				'todo-view':TodoView
+			},
+			service:{
+				'todo-service':TodoService
+			},
+			rule:[
+			     'todo-service;todo-view;data_got',
+			     'todo-view;todo-service;item_done',
+			     'todo-view;todo-service;item_undone',
+			     'todo-view;todo-service;item_delete',
+			     'todo-view;todo-service;item_add'
+			],
+			_default:{
+				'todo-service':'get_data'
+			}
+	}
+	
+	todo_connenct.analysis(todo_config);
+});
+</script>
+</body>
+</html>

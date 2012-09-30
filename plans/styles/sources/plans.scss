@@ -1,0 +1,55 @@
+@chaset 'UTF-8';
+@import 'reset.scss';
+$plan-height:25px;
+@mixin round-rect-conner($side, $radius: 10px) {
+	@if $side == topleft{
+			 -webkit-border-top-left-radius:$radius;
+			 border-top-left-radius: $radius;
+			 -moz-border-radius-#{$side}: $radius;
+	}@else if $side == bottomleft{
+			 -webkit-border-bottom-left-radius:$radius;
+			 border-bottom-left-radius: $radius;
+			 -moz-border-radius-#{$side}: $radius;
+	}@else if $side == topright{
+			 -webkit-border-top-right-radius:$radius;
+			 border-top-right-radius: $radius;
+			 -moz-border-radius-#{$side}: $radius;
+	}@else if $side == bottomright{
+			 -webkit-border-bottom-right-radius:$radius;
+			 border-bottom-right-radius: $radius;
+			 -moz-border-radius-#{$side}: $radius;
+	}@else if $side == all{
+		-webkit-border-radius:$radius;
+		border-radius: $radius;
+		-moz-border-radius: $radius;
+	}
+  
+}
+
+#to-do-list-layout{
+	position:relative;
+	li{
+		height:$plan-height;
+		position:relative;
+		span{
+			display:inline-block;
+			float:left;
+			line-height:$plan-height;
+			margin:0 10px;
+		}
+		a{
+			display:inline-block;
+			height:$plan-height;
+			line-height:$plan-height;
+        }
+		.to-do-done {
+			float:left;
+			width:25px;
+			@include round-rect-conner(all);
+			background-color:green;
+		}
+		.to-do-set{
+			width:25px;
+		}
+	}
+}
