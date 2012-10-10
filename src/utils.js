@@ -137,7 +137,10 @@
 		 */
 		delay:function(time,context){
 			var fn = this;
-			setTimeout(fn.proxy(context),time);
+			if(fn.__timeout){
+				clearTimeout(fn.__timeout);
+			}
+			fn.__timeout = setTimeout(fn.proxy(context),time);
 		}
 	};
 	
