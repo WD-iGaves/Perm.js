@@ -23,7 +23,15 @@ var EventDispatcher=(function(){
 		 *   
 		 * @param {IGEvent}e - 事件
 		 */ 
-		dispatchEvent:function(event,data,target){
+		dispatchEvent:function(event,data,target,sync){
+			//for aync execution.
+			if(!sync){
+				var self=this;
+				setTimeout(function(){
+					self.dispatchEvent(event, data, target, true);
+				},0);
+				return;
+			}
 			if(!this._eventHandler){
 				this._eventHandler = {};
 			}
