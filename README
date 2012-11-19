@@ -18,3 +18,6 @@ http://t.qq.com/igaves 莫大艺术家
 http://weibo.com/sunblessyou
 
 此框架千年不更新，参考思路，不要看具体实现。
+
+2012-11-19 log:
+	添加了瀑布流插件。可独立使用。
