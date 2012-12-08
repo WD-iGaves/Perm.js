@@ -13,6 +13,7 @@
 
 var EventDispatcher=(function(){
 	return {
+		_dispatched:{},
 		createEvent:function(type,data){
 			var e = {};
 			e.type = type;
@@ -37,6 +38,7 @@ var EventDispatcher=(function(){
 			}
 			
 			if(typeof event == 'string'){
+				this._dispatched[event] = 1;
 				event = this.createEvent(event,data);
 			}
 			
