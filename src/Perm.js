@@ -152,7 +152,7 @@ var Perm = {
 			return this.view(name);
 		}
 		return this.service(name);
-	}
+	},
 	/**
 	 *@example Perm.view("todo");
 	 */
@@ -172,7 +172,7 @@ var PermObserver =  Class.create({
 		for(var key in target){
 			this[key] = target;
 		}
-	},
+	}
 },EventDispatcher);
 var _view_property = {
 	/**
