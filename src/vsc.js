@@ -115,7 +115,7 @@ var Service = Class.create({
 },EventDispatcher);
 
 var Model = Class.create({
-	//公共方法
+	//公共方l
 	attr:function(){
 		
 	},

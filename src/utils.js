@@ -154,7 +154,7 @@
 	Class.extend(__props,_ex_string);
 })();
 (function(){
-	var __props = RegExp.prototype;
+//	var __props = RegExp.prototype;
 })();
 var Utils = (function(){
 	function try_these(){

@@ -64,7 +64,7 @@ var Perm = {
 		if(this._is_runing){
 			this._do_hash_rule(rule);
 		}
-	}
+	},
 	/**
 	 * @desc 设置hash规则。默认default 直接在ready 后执行
 	 *{
