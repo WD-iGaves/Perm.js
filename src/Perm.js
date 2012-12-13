@@ -30,6 +30,7 @@ var Perm = {
 	 */
 	run:function(){
 		//绑定hash事件
+		this._instance_all();
 		this._hash_changed();
 		//执行默认的事件
 		this._default.each(function(item){
@@ -38,22 +39,37 @@ var Perm = {
 		this._is_runing = true;	
 	},
 	/**
+	 *@desc -初始化所有的对象
+	 */
+	_instance_all:function(){
+		for(var view in this.__views){
+			this._views[view] = Class.instance(this.__views[view]);
+		}	
+		for(var service in this.__services){
+			this._services[service] = Class.instance(this.__services[service]);
+		}
+	},
+	/**
 	 *@example 
 	 * Perm.register('todo.view',todo_property,enumberable);
 	 */
 	register:function(name,property,ex){
 		ex = ex||[];
-		if(!/model|view/i.test(name)) throw 'illigal instance target';
+		if(!/service|view/i.test(name)) throw 'illigal instance target:'+name;
 		
 		var klass = Class.create.call(null,[property].concat(ex));
 		var names = name.split(".");
 		name = names[0];
 		if(/view/i.test(names[1])){
 			this.__views[name] = klass;
-			this._views[name] = Class.instance(klass);
+			if(this._is_runing){
+				this._views[name] = Class.instance(klass);
+			}
 		}else{
 			this.__services[name] = klass;
-			this._services[name] = Class.instance(klass);
+			if(this._is_runing){
+				this._services[name] = Class.instance(klass);
+			}
 		}
 	},
 	/**
@@ -94,12 +110,18 @@ var Perm = {
 	]		
 	 *
 	 */
-	set_rules:function(rules){
-		this.rules = rules;
-		rules.each(function(rule){
-			var arr = rule.split('/');
+	add_rules:function(rules){
+		this.rules = this.rules.merge(rules);
+		if(this._is_runing){
+			rules.each(this._run_rule.proxy(this));
+		}
+	},
+	_run_rule:function(rule){
+		var arr = rule.split('/');
+		if(this._is_runing){
 			this.get(arr[0]).bind(arr[1],this.get(arr[2])[arr[3]]);
-		},this);
+		}
+		return this;
 	},
 	_hash_changed:function(){
 		$(window).on('hashchange',this._hash_change_handler.proxy(this));
@@ -133,7 +155,9 @@ var Perm = {
 	 *@desc 调用某个view/service的方法,一般说是被hash_rules调用
 	 */
 	_call_function:function(action,fn,params){
-		this.get(action)[fn].apply(null,params);	
+		params = params||[];
+		var target = this.get(action);
+		target[fn].apply(target,params);
 	},
 	trace:function(things){
 		if(!!console){
@@ -172,6 +196,11 @@ var PermObserver =  Class.create({
 		for(var key in target){
 			this[key] = target;
 		}
+	},
+	__alias_event:function(){
+		this.bind = this.addEventListener;
+		this.trigger = this.dispatchEvent;
+		this.unbund = this.removeEventListener;
 	}
 },EventDispatcher);
 var _view_property = {
@@ -193,8 +222,6 @@ var _view_property = {
 	 * @param *args{Object}
 	 */
 	initialize:function(args){
-		this._ex(args);
-		this._init_all_selector();
 	},
 	get:function(name){
 		return this.selector[name];
@@ -249,7 +276,7 @@ var View = Class.create(_view_property,PermObserver);
  *
  */
 var _service_property = {
-	this.initialize(){
+	initialize:function(){
 		this.__alias_event();
 	}	
 };
@@ -259,4 +286,4 @@ var Service = Class.create(_service_property,PermObserver);
 	$(document).ready(function(){
 		Perm.run();
 	});
-});
+})();
