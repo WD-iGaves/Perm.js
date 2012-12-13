@@ -123,7 +123,7 @@ var Perm = {
 		if(typeof rule == 'function'){
 			rule();
 		}else{
-			var as == rule.split('/');
+			var as = rule.split('/');
 			var action = as[0],fn = as[1];
 			this._call_function(action,fn,result);
 		}	
