@@ -15,11 +15,27 @@ var Perm = {
 	__views:{},
 	_services:{},
 	__services:{},
+	_is_runing:false,
+	/**
+	 *
+	 */
+	hash_rules:{},
+	rules:[],
+	/**
+	 *默认执行
+	 */
+	_default:[],
 	/**
 	 *	
 	 */
 	run:function(){
-		
+		//绑定hash事件
+		this._hash_changed();
+		//执行默认的事件
+		this._default.each(function(item){
+			this._do_hash_rule(item);
+		},this);
+		this._is_runing = true;	
 	},
 	/**
 	 *@example 
@@ -41,6 +57,16 @@ var Perm = {
 		}
 	},
 	/**
+	 *@desc 设置直接执行的规则或者设置默认起始规则
+	 */
+	init_with:function(rule){
+		this._default.push(rule);		
+		if(this._is_runing){
+			this._do_hash_rule(rule);
+		}
+	}
+	/**
+	 * @desc 设置hash规则。默认default 直接在ready 后执行
 	 *{
 	 	default:'todoservice/getname',
 		/say[\w]+/:'todoservice/say',
@@ -53,8 +79,15 @@ var Perm = {
 	 */
 	set_hash_rules:function(rules){
 		this.hash_rules = rules;	
+		if(rules['default']){
+			if(typeof rules['default'] == 'object'){
+				this._default = this._default.merge(rules['default']);
+			}
+		}
+		return this;
 	},
 	/**
+	 * @desc 普通事件规则,就是view和service之间的绑定
 	*[
 		todo.view/itemdelete/todo.service/itemdelete
 		todo.service/todo.view/data:got
@@ -68,7 +101,6 @@ var Perm = {
 			this.get(arr[0]).bind(arr[1],this.get(arr[2])[arr[3]]);
 		},this);
 	},
-
 	_hash_changed:function(){
 		$(window).on('hashchange',this._hash_change_handler.proxy(this));
 	},
@@ -79,21 +111,26 @@ var Perm = {
 				result = patter.exec(window.location.hash);
 				result = result.slice(1);
 			if(result){
-				if(typeof this.hash_rules[key] == 'function'){
-					this.hash_rules[key](result);
-				}else{
-					var as = this.hash_rules[key].split('/'),
-						action = as[0],fn = as[1];
-					this._call_function(action,fn,result);
-				}	
+				this._do_hash_rule(this.hash_rules[key],result);
 				return true;
 			}	
 		}	
-		
+	},
+	/**
+	 *执行某一条hash规则
+	 */
+	_do_hash_rule:function(rule,result){
+		if(typeof rule == 'function'){
+			rule();
+		}else{
+			var as == rule.split('/');
+			var action = as[0],fn = as[1];
+			this._call_function(action,fn,result);
+		}	
 	},
 	/*
 	 *
-	 *@desc 调用某个view/service的方法
+	 *@desc 调用某个view/service的方法,一般说是被hash_rules调用
 	 */
 	_call_function:function(action,fn,params){
 		this.get(action)[fn].apply(null,params);	
@@ -217,5 +254,9 @@ var _service_property = {
 	}	
 };
 var Service = Class.create(_service_property,PermObserver);
-
-
+//主要运行函数
+(function(){
+	$(document).ready(function(){
+		Perm.run();
+	});
+});
