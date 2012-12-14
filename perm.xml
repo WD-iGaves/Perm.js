@@ -23,9 +23,9 @@
         <!-- 需要注意这里的拼接顺序 &js -->
         <concat destfile="${packed}/perm.${version}.js" encoding="utf-8" fixlastline="on">
             <fileset dir="${source}" includes="enumberable.js" />
-            <fileset dir="${source}" includes="eventdispatcher.js" />
-            <fileset dir="${source}" includes="utils.js" />
         	<fileset dir="${source}" includes="class.js" />
+            <fileset dir="${source}" includes="utils.js" />
+            <fileset dir="${source}" includes="eventdispatcher.js" />
         	<fileset dir="${source}" includes="Perm.js" />
         </concat>
         <echo message="Concat Code Files Finished!" />
