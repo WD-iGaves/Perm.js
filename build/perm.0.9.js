@@ -564,10 +564,6 @@ var EventDispatcher=(function(){
 		}
 	};
 })();
-//import utils.js
-//import class.js
-//import enumberable.js
-//import eventdispatcher.js
 var Perm =(function(){
 	var PermObserver =  Class.create({
 		initialize:function(){
@@ -626,6 +622,7 @@ var Perm =(function(){
 			try{
 				var arr = item.split('/');
 				if(arr.length==3){
+					//proxy
 					this._selector[arr[0]].on(arr[1],this[arr[2]+'_handler']);
 				}else{
 					this._selector[arr[0]].on(arr[1],arr[2],this[arr[3]+'_handler']);
@@ -712,7 +709,7 @@ var Perm =(function(){
 		 * Perm.register('todo.view',todo_property,enumberable);
 		 */
 		register:function(name,property,ex){
-			ex = ex||[];
+			ex = Array.prototype.slice.call(arguments,2)||[];
 			if(!/service|view/i.test(name)) throw 'illigal instance target:'+name;
 			var names = name.split(".");
 			var parent_class = name[1] == 'view'?View:Service;
@@ -722,6 +719,7 @@ var Perm =(function(){
 				this.__views[name] = klass;
 				if(this._is_runing){
 					this._views[name] = Class.instance(klass);
+					this._do_hash_rule(name+'.view/_init_all_selector');
 				}
 			}else{
 				this.__services[name] = klass;
@@ -733,7 +731,7 @@ var Perm =(function(){
 		/**
 		 *@desc 设置直接执行的规则或者设置默认起始规则
 		 */
-		init_with:function(rule){
+		init_with:function(rule,args){
 			this._default.push(rule);		
 			if(this._is_runing){
 				this._do_hash_rule(rule);
@@ -855,4 +853,3 @@ var Perm =(function(){
 		Perm.run();
 	});
 })();
-
