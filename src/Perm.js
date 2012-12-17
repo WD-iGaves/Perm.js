@@ -143,7 +143,7 @@ var Perm =(function(){
 		 * Perm.register('todo.view',todo_property,enumberable);
 		 */
 		register:function(name,property,ex){
-			ex = ex||[];
+			ex = Array.prototype.slice.call(arguments,2)||[];
 			if(!/service|view/i.test(name)) throw 'illigal instance target:'+name;
 			var names = name.split(".");
 			var parent_class = name[1] == 'view'?View:Service;
