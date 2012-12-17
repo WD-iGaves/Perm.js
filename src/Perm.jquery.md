@@ -1,5 +1,5 @@
 #Perm.js #
-Perm.js是前端分层框架。
+Perm.js是前端分层框架。(测试中)
 
 框架内包含View & Service类。
 所有的类实现自[class.js](https://github.com/Wcolor/Perm.js/blob/master/src/class.js "class.js"),
