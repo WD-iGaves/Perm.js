@@ -22,7 +22,7 @@ Service类实现:
 
 **Service&View无法实例化，必须走注册实现。**
 
-Perm.js's Function
+# Perm #
 
 ## Perm.register(name,property,*ex) ##
 **注册view&service**
@@ -45,7 +45,7 @@ name中必须带有.view .service来表示类型。
 	'content.service/data:got/content.view/set_content_data'
 ]);`
 
-## Perm.set_hash_rules ##
+## Perm.set_hash_rules(hash_rules) ##
 **设置hash触发规则**
 此规则触发，需要监听windows onhashchange触发，一般作为单页面Webapp执行。默认default为直接执行。
 
@@ -58,15 +58,43 @@ name中必须带有.view .service来表示类型。
 			}
 		  });`
 
-## Perm.get ##
+## Perm.get(instance_name) ##
 
 **获取实例化后的对象**
 `Perm.get('demo.service')`
 `Perm.get('demo.view')`
 
-## Perm.service&Perm.view ##
+## Perm.service(name)&Perm.view(name) ##
 **直接获取对应实例**
 `Perm.view("demo");Perm.service("demo")`
+
+# View: #
+
+view包含浏览器事件，Dom绘制等等处理
+##.selector##
+默认选择器，object,会按照key存储起来被选择的内容
+
+`{
+
+'say_btn':".ctrl a.btn"
+
+'close':".close"
+
+}`
+
+## .add_event(event_rule) & .remove_event(event_rule)##
+
+**添加一条绑定规则**
+
+`this.add_event/remove_event("say_btn/click/say");`
+
+**delegate**
+
+`this.add_event/remove_event("say_btn/a/click/say")`
+
+
+
+
 
 
 

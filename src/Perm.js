@@ -56,6 +56,7 @@ var Perm =(function(){
 			try{
 				var arr = item.split('/');
 				if(arr.length==3){
+					//proxy
 					this._selector[arr[0]].on(arr[1],this[arr[2]+'_handler']);
 				}else{
 					this._selector[arr[0]].on(arr[1],arr[2],this[arr[3]+'_handler']);
