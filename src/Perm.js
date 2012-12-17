@@ -153,6 +153,7 @@ var Perm =(function(){
 				this.__views[name] = klass;
 				if(this._is_runing){
 					this._views[name] = Class.instance(klass);
+					this._do_hash_rule(name+'.view/_init_all_selector');
 				}
 			}else{
 				this.__services[name] = klass;
@@ -164,7 +165,7 @@ var Perm =(function(){
 		/**
 		 *@desc 设置直接执行的规则或者设置默认起始规则
 		 */
-		init_with:function(rule){
+		init_with:function(rule,args){
 			this._default.push(rule);		
 			if(this._is_runing){
 				this._do_hash_rule(rule);
