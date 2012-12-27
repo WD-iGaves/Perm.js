@@ -1,57 +1,62 @@
 /**
- * @namespace
- * @desc 类控制器
+ * Perm.js JavaScript Inheritance
+ * By D.Wang http://igaves.com
+ * MIT Licensed
+ * 
+ * @warnning 子类不会执行父类的构造函数。请用this._super('initialize');调用
  */
 var Class = (function(){
 	var _slice = [].slice;
 	
 	function create(property){
+		//property为类属性列表，initialize为构造函数。
 		if(!property.initialize){
 			property.initialize = function(){};
 		}
-		
+		//构造类。
 		var _class = function(){
-			if(typeof this.initialize == 'function'){
+			//console.log(this.__uninitialize);
+			if(!this.__uninitialize && typeof this.initialize == 'function'){
 				return this.initialize.apply(this,arguments);
 			}
 		};
 		var args = [];
-		
+		//取property后面的参数列表，用来apply
 		args = _slice.call(arguments,1);
-		//inherit
-		var key=null;
+		
+		var key=null,parent_property = null;
 		//父类的构造函数
-		var _super_init = null;
+		//如果父类存在，是继承状态
 		if(typeof args[0] == 'function'){
+			//
+			//如果弗雷中
+			//
 			var parent = args[0];
-			_super_init = parent.prototype.initialize;
+			parent.prototype.__uninitialize = true;
+			parent_property = new parent();//不执行initialize
+			parent.prototype.__uninitialize = false;
+			//父类的prototype赋值。
+			_class.prototype = parent_property;
+			_class.prototype._super = parent.prototype;
 			
-			if(typeof _super_init == 'function'){
-				//销毁父实例的initailize;
-				parent.prototype.initialize = function(){};
-				
-				var _this_init = property.initialize;
-				property.initialize=function(){
-					_super_init.apply(this,arguments);
-					_this_init.apply(this,arguments);
-				};
-			}
-
-			var iparent = new parent();
-			//复原
-			parent.prototype.initialize = _super_init;
-			//销毁父类
-			iparent.initialize=function(){};
-			//start为了防止父类函数执行的时候，this指针变化，特意把initialize拿出来执行
-			//end
-			_class.prototype = iparent;
-			_class.prototype.parent = parent;
-			_class.prototype._super=function(){
-				if(this.parent && this.parent.prototype[arguments[0]]){
-					return this.parent.prototype[arguments[0]].apply(this,_slice.call(arguments,1));
-				}
-			};
 			args = args.slice(1);
+		}
+		//继承
+		for(key in property){
+			var current_fn = property[key];
+			if(parent_property && typeof _class.prototype._super[key] == 'function'){
+				_class.prototype[key] = (function(k,v){
+					return function(){
+						var tmp  =this._super;
+						this._super = tmp[k];
+						var result = v.apply(this,arguments);
+						this._super = tmp;
+						return result;
+					};
+				})(key,current_fn);
+			}else{
+				_class.prototype[key] = property[key];
+			}
 		}
 		
 		//mixin
@@ -63,13 +68,7 @@ var Class = (function(){
 				}
 			}
 		}
-		//self
-		for(key in property){
-			_class.prototype[key] = property[key];
-		}
-//		if(!_class.prototype.initialize){
-//			_class.prototype.initialize=function(){};
-//		}
+
 		_class.prototype.constructor = _class;
 		
 		return _class;
@@ -89,6 +88,13 @@ var Class = (function(){
 		}
 		
 		return className._instance;
+	}
+	
+	function extend(class_name,static_property){
+		for(var key in static_property){
+			class_name[key] = static_property[key];
+		}
+		return class_name;
 	}
 	
 	return {
@@ -154,23 +160,20 @@ var Class = (function(){
 		 * @example 
 		 * Class.instance(Service);
 		 */
-		instance:instance
+		instance:instance,
+		/**
+		 * 扩展静态方法
+		 * @param {function/Class} -className/ModuleName/Object
+		 * @param {object} -staticProperty -静态属性
+		 * @example
+		 * Class.extend(Dom,{
+		 * 	create:function(nodeName){
+		 * 		reutrn document.createElement(nodeName);
+		 * }
+		 * })
+		 */
+		extend:extend
 	};
 })();
-/**
- * 扩展静态方法
- * @param {function/Class} -className/ModuleName/Object
- * @param {object} -staticProperty -静态属性
- * @example
- * Class.extend(Dom,{
- * 	create:function(nodeName){
- * 		reutrn document.createElement(nodeName);
- * }
- * })
- */
-Class.extend=function(className,staticProperty){
-	for(var key in staticProperty){
-		className[key] = staticProperty[key];
-	}
-	return className;
-};
+
+
